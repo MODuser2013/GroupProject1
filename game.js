@@ -8,6 +8,10 @@
    var boxMaterial = new THREE.MeshLambertMaterial( { map: boxTexture} )
    var player;
 
+   var TRACK_WIDTH = 90;
+   var speed = 1;
+   var distance = 0;
+
    function obLine(){}
    obLine.prototype.L1 = false;
    obLine.prototype.L2 = false;
@@ -38,7 +42,7 @@
 
        if(this.L1 && placed < 2){
            var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
-           t.translateX(-90);
+           t.translateX(-TRACK_WIDTH);
            this.data.add(t);
            placed++;
        }
@@ -50,15 +54,15 @@
        }
        if(this.L3 && placed < 2){
            var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
-           t.translateX(90);
+           t.translateX(TRACK_WIDTH);
            this.data.add(t);
            placed++;
        }
        if(placed < 2){
            var r = Math.random() * 3;
            var trans = 0;
-           if(r < 1){trans = -90;}
-           if(r > 2){trans = 90;}
+           if(r < 1){trans = -TRACK_WIDTH;}
+           if(r > 2){trans = TRACK_WIDTH;}
 
            var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(trans);
@@ -150,7 +154,8 @@ function initScene() {
 }
 function update() {
          //updates location of all 'obstacles' objects, checks collisions, removes hidden, adds new
-         test.data.translateZ(1); //this is what brings the boxes to the player, the value can be incremented to increase difficulty
+         test.data.translateZ(speed); //this is what brings the boxes to the player, the value can be incremented to increase difficulty
+         distance+= speed;
 }
 
 function draw() {
@@ -162,10 +167,10 @@ function draw() {
 }
 
 $('body').keyup(function(e){
-   if(e.which == 65 && player.position.x > -90){  //a
-       player.position.x -= 90;
-   } else if(e.which == 68 && player.position.x < 90){ //d
-       player.position.x += 90;
+   if(e.which == 65 && player.position.x > -TRACK_WIDTH){  //a
+       player.position.x -= TRACK_WIDTH;
+   } else if(e.which == 68 && player.position.x < TRACK_WIDTH){ //d
+       player.position.x += TRACK_WIDTH;
    }
 });
 
