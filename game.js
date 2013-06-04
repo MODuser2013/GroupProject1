@@ -2,6 +2,47 @@
    var gCamera;
    var gRenderer;
    var paused = false;
+   var updateTimer;
+   var defaultMat = new THREE.MeshLambertMaterial({color: 0xCC0000});
+   var player = new THREE.Mesh(new THREE.SphereGeometry(50, 16, 16),defaultMat);
+   var obstacleLine = new THREE.Object3D();
+   var obstacle = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
+   obstacleLine.cOne = false;
+   obstacleLine.cTwo = false;
+   obstacleLine.cThree = false;
+   obstacleLine.isCollided = new function(track){
+    switch(track){
+        case 0:
+            return this.cOne;
+        break;
+        case 1:
+            return this.cTwo;
+        break;
+        case 2:
+            return this.cThree;
+        break;
+    }
+   };
+   obstacleLine.generate = new function(){
+       var a = Math.random() > 0.5;
+       var b = Math.random() > 0.5;
+       var c = Math.random() > 0.5;
+       this.cOne = a;
+       this.cTwo = b;
+       this.cThree = c;
+
+       if(this.cOne){
+           this.add(obstacle.clone);
+       }
+       if(this.cTwo){
+           this.add(obstacle.clone);
+       }
+       if(this.cThree){
+           this.add(obstacle.clone);
+       }
+   };
+   var boxes;
+
 
 
 
@@ -9,9 +50,7 @@ function main() {
 
   initTHREE();  //sets up all THREE.js variables
   initScene(); //adds all objects,creates textures, creates first blocks
-  while(!paused){
-      draw();
-  }
+  updateTimer = setInterval(draw,100);
 }
 
 function initTHREE() {
@@ -63,24 +102,31 @@ function initTHREE() {
     gRenderer = renderer;
 }
 function initScene() {
-    // create the sphere's material
-    var sphereMaterial = new THREE.MeshLambertMaterial(
-        {
-            color: 0xCC0000
-        });
-    var sphere = new THREE.Mesh(
-        new THREE.SphereGeometry(50, 16, 16),
-        sphereMaterial);
-    gScene.add(sphere);
+   gCamera.translateY(100); //move above to give perspective
+  // gCamera.rotateY(); //rotate back into view
+    gScene.add(player);
+
+    //[Brandon] so yeah, this code isn't working because I still haven't gotten my head around javascript's inheritance/extending syntax. Zach, maybe you
+    //could figure out whats going wrong, I can't run a .clone command on the object because the Object3D doesn't have a clone function but we need a
+    //empty object to add the boxes to and this will cut out our having to have actual collision detection, everything is track based anyway so this should cut
+    //down on the time needed for each update loop. my idea is that when obstacleLine.Z == player.Z then run the obstacleLine.isCollided(player.track).
+    //player.track is 0-2 representing which lane it is in (obviously but I thought I'd better write it down). I'm going to continue with the 3D side so Zach or Ja
+    //good luck to you! :D
+
+    /*var test = obstacleLine;
+    test.generate();
+    gScene.add(test);*/
 }
 function update() {
          //updates location of all 'obstacles' objects, checks collisions, removes hidden, adds new
+
 }
 
 function draw() {
+    if(!paused)
+    {
     update();
     gRenderer.render(gScene,gCamera);
-    paused=true;      //used to not crash until delay is added
-    //delay here, need to vary it based on time between calls to keep a solid fps (45?)
+    }
 }
 
