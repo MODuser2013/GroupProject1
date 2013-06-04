@@ -161,3 +161,11 @@ function draw() {
     }
 }
 
+$('body').keyup(function(e){
+   if(e.which == 65 && player.position.x > -90){  //a
+       player.position.x -= 90;
+   } else if(e.which == 68 && player.position.x < 90){ //d
+       player.position.x += 90;
+   }
+});
+
