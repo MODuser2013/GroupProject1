@@ -11,6 +11,7 @@
    var TRACK_WIDTH = 90;
    var speed = 1;
    var distance = 0;
+   var obChance = .5;
 
    function obLine(){}
    obLine.prototype.L1 = false;
@@ -32,40 +33,31 @@
     }
    };
    obLine.prototype.generate = function(){
-       var a = Math.random() > 0.5;
-       var b = Math.random() > 0.5;
-       var c = Math.random() > 0.5;
+       var a = Math.random() > obChance;
+       var b = Math.random() > obChance;
+       var c = Math.random() > obChance;
+       while(  ( !a && !b && !c ) || (a && b && c)  ){
+           a = Math.random() > obChance;
+           b = Math.random() > obChance;
+           c = Math.random() > obChance;
+       }
        this.L1 = a;
        this.L2 = b;
        this.L3 = c;
-       var placed = 0;
 
-       if(this.L1 && placed < 2){
+       if(this.L1){
            var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(-TRACK_WIDTH);
            this.data.add(t);
-           placed++;
        }
-       if(this.L2 && placed < 2){
+       if(this.L2){
            var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(0);
            this.data.add(t);
-           placed++;
        }
-       if(this.L3 && placed < 2){
+       if(this.L3){
            var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(TRACK_WIDTH);
-           this.data.add(t);
-           placed++;
-       }
-       if(placed < 2){
-           var r = Math.random() * 3;
-           var trans = 0;
-           if(r < 1){trans = -TRACK_WIDTH;}
-           if(r > 2){trans = TRACK_WIDTH;}
-
-           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
-           t.translateX(trans);
            this.data.add(t);
        }
    };
