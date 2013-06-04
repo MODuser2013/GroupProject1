@@ -3,8 +3,10 @@
    var gRenderer;
    var paused = false;
    var updateTimer;
-   var defaultMat = new THREE.MeshLambertMaterial({color: 0xCC0000});
-   var player = new THREE.Mesh(new THREE.SphereGeometry(50, 16, 16),defaultMat);
+   var playerTexture = THREE.ImageUtils.loadTexture( 'moon.jpg' );
+   var boxTexture = THREE.ImageUtils.loadTexture( 'crate.gif' );
+   var boxMaterial = new THREE.MeshLambertMaterial( { map: boxTexture} )
+   var player;
 
    function obLine(){}
    obLine.prototype.L1 = false;
@@ -35,19 +37,19 @@
        var placed = 0;
 
        if(this.L1 && placed < 2){
-           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
+           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(-90);
            this.data.add(t);
            placed++;
        }
        if(this.L2 && placed < 2){
-           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
+           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(0);
            this.data.add(t);
            placed++;
        }
        if(this.L3 && placed < 2){
-           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
+           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(90);
            this.data.add(t);
            placed++;
@@ -58,7 +60,7 @@
            if(r < 1){trans = -90;}
            if(r > 2){trans = 90;}
 
-           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
+           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(trans);
            this.data.add(t);
        }
@@ -66,7 +68,12 @@
 
    var test = new obLine();
 
-
+   //TODO add in movement controls
+   //TODO add in collision checking
+   //TODO add in floor
+   //TODO add in a menu and high score screen
+   //TODO add obstacle spawning, score tracking and difficulty levels
+   //TODO make it look cooler :D if we have time that is
 
 function main() {
 
@@ -127,6 +134,10 @@ function initScene() {
    gCamera.translateY(300); //move above to give perspective
    gCamera.rotation.x = -0.6;
    gCamera.translateZ(-25);
+
+
+   var playerMaterial = new THREE.MeshLambertMaterial( { map: playerTexture} )
+   player = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 16),playerMaterial);
    player.translateZ(25);  //moves the player back a bit
    gScene.add(player);
 
