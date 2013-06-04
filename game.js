@@ -5,12 +5,14 @@
    var updateTimer;
    var defaultMat = new THREE.MeshLambertMaterial({color: 0xCC0000});
    var player = new THREE.Mesh(new THREE.SphereGeometry(50, 16, 16),defaultMat);
-   var obstacleLine = new THREE.Object3D();
-   var obstacle = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
-   obstacleLine.cOne = false;
-   obstacleLine.cTwo = false;
-   obstacleLine.cThree = false;
-   obstacleLine.isCollided = new function(track){
+
+   function obLine(){}
+   obLine.prototype.L1 = false;
+   obLine.prototype.L2 = false;
+   obLine.prototype.L3 = false;
+   obLine.prototype.data = new THREE.Object3D();
+   obLine.prototype.distance = 0; //the z value to provide easy access
+   obLine.prototype.isCollided = function(track){
     switch(track){
         case 0:
             return this.cOne;
@@ -23,26 +25,46 @@
         break;
     }
    };
-   obstacleLine.generate = new function(){
+   obLine.prototype.generate = function(){
        var a = Math.random() > 0.5;
        var b = Math.random() > 0.5;
        var c = Math.random() > 0.5;
-       this.cOne = a;
-       this.cTwo = b;
-       this.cThree = c;
+       this.L1 = a;
+       this.L2 = b;
+       this.L3 = c;
+       var placed = 0;
 
-       if(this.cOne){
-           this.add(obstacle.clone);
+       if(this.L1 && placed < 2){
+           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
+           t.translateX(-90);
+           this.data.add(t);
+           placed++;
        }
-       if(this.cTwo){
-           this.add(obstacle.clone);
+       if(this.L2 && placed < 2){
+           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
+           t.translateX(0);
+           this.data.add(t);
+           placed++;
        }
-       if(this.cThree){
-           this.add(obstacle.clone);
+       if(this.L3 && placed < 2){
+           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
+           t.translateX(90);
+           this.data.add(t);
+           placed++;
+       }
+       if(placed < 2){
+           var r = Math.random() * 3;
+           var trans = 0;
+           if(r < 1){trans = -90;}
+           if(r > 2){trans = 90;}
+
+           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
+           t.translateX(trans);
+           this.data.add(t);
        }
    };
-   var boxes;
 
+   var test = new obLine();
 
 
 
@@ -50,7 +72,7 @@ function main() {
 
   initTHREE();  //sets up all THREE.js variables
   initScene(); //adds all objects,creates textures, creates first blocks
-  updateTimer = setInterval(draw,100);
+  updateTimer = setInterval(draw,50);
 }
 
 function initTHREE() {
@@ -92,7 +114,7 @@ function initTHREE() {
 
     // set its position
     pointLight.position.x = 10;
-    pointLight.position.y = 50;
+    pointLight.position.y = 150;
     pointLight.position.z = 100;
 
     // add to the scene
@@ -102,24 +124,22 @@ function initTHREE() {
     gRenderer = renderer;
 }
 function initScene() {
-   gCamera.translateY(100); //move above to give perspective
-  // gCamera.rotateY(); //rotate back into view
-    gScene.add(player);
+   gCamera.translateY(300); //move above to give perspective
+   gCamera.rotation.x = -0.6;
+   gCamera.translateZ(-25);
+   player.translateZ(25);  //moves the player back a bit
+   gScene.add(player);
 
-    //[Brandon] so yeah, this code isn't working because I still haven't gotten my head around javascript's inheritance/extending syntax. Zach, maybe you
-    //could figure out whats going wrong, I can't run a .clone command on the object because the Object3D doesn't have a clone function but we need a
-    //empty object to add the boxes to and this will cut out our having to have actual collision detection, everything is track based anyway so this should cut
-    //down on the time needed for each update loop. my idea is that when obstacleLine.Z == player.Z then run the obstacleLine.isCollided(player.track).
-    //player.track is 0-2 representing which lane it is in (obviously but I thought I'd better write it down). I'm going to continue with the 3D side so Zach or Ja
-    //good luck to you! :D
 
-    /*var test = obstacleLine;
+
     test.generate();
-    gScene.add(test);*/
+    test.data.translateZ(-100);
+    gScene.add(test.data);
+    console.log(test);
 }
 function update() {
          //updates location of all 'obstacles' objects, checks collisions, removes hidden, adds new
-
+         test.data.translateZ(1); //this is what brings the boxes to the player, the value can be incremented to increase difficulty
 }
 
 function draw() {
