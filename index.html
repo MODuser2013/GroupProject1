@@ -7,18 +7,30 @@
             background: #bef2f2;
             width: 400px;
             height: 300px;
+            float: left;
+        }
+        #highScores {
+            float: left;
+            margin-left: 10%;
         }
     </style>
 </head>
 <body>
 
-<div id="canvas">
+<div id="canvas"></div>
 
-
+<div id="highScores" ng-app ng-controller="localHSCtrl">
+    <h2>High Scores</h2>
+    <ol>
+        <li ng-repeat="l in localHS">{{l.name}} - {{l.score}}</li>
+    </ol>
 </div>
+
 <script src="jquery.min.js"></script>
 <script src="Three.js"></script>
 <script src="game.js"></script>
+<script src="angular.min.js"></script>
+<script src="highscores.js"></script>
 
 <script>main(); // runs main function</script>
 
