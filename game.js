@@ -2,14 +2,19 @@
    var gCamera;
    var gRenderer;
    var paused = false;
+   var runSpeed = 5;
    var updateTimer;
    var defaultMat = new THREE.MeshLambertMaterial({color: 0xCC0000});
    var player = new THREE.Mesh(new THREE.SphereGeometry(50, 16, 16),defaultMat);
    var obstacleLine = new THREE.Object3D();
    var obstacle = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
+   var obstacleL = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
+   var obstacleM = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
+   var obstacleR = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), defaultMat);
    obstacleLine.cOne = false;
    obstacleLine.cTwo = false;
    obstacleLine.cThree = false;
+   initTHREE();
    obstacleLine.isCollided = new function(track){
     switch(track){
         case 0:
@@ -27,18 +32,29 @@
        var a = Math.random() > 0.5;
        var b = Math.random() > 0.5;
        var c = Math.random() > 0.5;
+       while(  ( !a && !b && !c ) || (a && b && c)  ){
+           a = Math.random() > .5;
+           b = Math.random() > .5;
+           c = Math.random() > .5;
+       }
        this.cOne = a;
        this.cTwo = b;
        this.cThree = c;
 
        if(this.cOne){
-           this.add(obstacle.clone);
+           //this.add(obstacle.clone);
+           obstacleL.position = new THREE.Vector3(-100,0,-500);
+           gScene.add(obstacleL);
        }
        if(this.cTwo){
-           this.add(obstacle.clone);
+           //this.add(obstacle.clone);
+           obstacleM.position = new THREE.Vector3(0,0,-500);
+           gScene.add(obstacleM);
        }
        if(this.cThree){
-           this.add(obstacle.clone);
+           //this.add(obstacle.clone);
+           obstacleR.position = new THREE.Vector3(100,0,-500);
+           gScene.add(obstacleR);
        }
    };
    var boxes;
@@ -48,7 +64,7 @@
 
 function main() {
 
-  initTHREE();  //sets up all THREE.js variables
+  //initTHREE();  //sets up all THREE.js variables
   initScene(); //adds all objects,creates textures, creates first blocks
   updateTimer = setInterval(draw,100);
 }
@@ -118,8 +134,9 @@ function initScene() {
     gScene.add(test);*/
 }
 function update() {
-         //updates location of all 'obstacles' objects, checks collisions, removes hidden, adds new
-
+     //updates location of all 'obstacles' objects, checks collisions, removes hidden, adds new
+    gCamera.position.z -= runSpeed;
+    player.position.z -= runSpeed;
 }
 
 function draw() {
@@ -130,3 +147,11 @@ function draw() {
     }
 }
 
+   $('body').keyup(function(e){
+       console.log(e);
+       if(e.which == 65){  //a
+           player.position.x -= 100;
+       } else if(e.which == 68){ //d
+           player.position.x += 100;
+       }
+   });
