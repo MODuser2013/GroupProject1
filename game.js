@@ -163,6 +163,9 @@ $('body').keyup(function(e){
        player.position.x -= TRACK_WIDTH;
    } else if(e.which == 68 && player.position.x < TRACK_WIDTH){ //d
        player.position.x += TRACK_WIDTH;
+   } else if(e.which == 80){
+       paused = !paused;
+       $('#pauseMenu').toggle();
    }
 });
 

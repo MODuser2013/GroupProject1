@@ -13,17 +13,54 @@
             float: left;
             margin-left: 10%;
         }
+        #menu{
+            height: 300px;
+            width: 400px;
+            position: absolute;
+            background: lightGray;
+            display: none;
+            text-align: center;
+        }
+        #pauseMenu{
+            height: 300px;
+            width: 400px;
+            position: absolute;
+            background: lightGray;
+            display: none;
+            text-align: center;
+            opacity: .8;
+        }
+        #newHS{
+            height: 300px;
+            width: 400px;
+            position: absolute;
+            background: lightGray;
+
+            text-align: center;
+        }
     </style>
 </head>
-<body>
+<body ng-app ng-controller="Ctrl">
 
 <div id="canvas"></div>
 
-<div id="highScores" ng-app ng-controller="localHSCtrl">
+<div id="highScores">
     <h2>High Scores</h2>
     <ol>
         <li ng-repeat="l in localHS">{{l.name}} - {{l.score}}</li>
     </ol>
+</div>
+
+<div id="menu">Menu</div>
+<div id="pauseMenu">Paused</div>
+<div id="newHS">
+    <h3>New High Score</h3>
+    <form ng-submit="newHS()">
+        <input type="text" ng-model="newHSName" placeholder="Name">
+        <input type="submit">
+    </form>
+    <br><br>
+    Score: <span id="newHSScore"></span>
 </div>
 
 <script src="jquery.min.js"></script>
