@@ -39,19 +39,19 @@
        var made = 0;
 
        if(this.L1 && made < 2){
-           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
+           var t = new THREE.Mesh(new THREE.CubeGeometry(80,125,80), boxMaterial);
            t.translateX(-TRACK_WIDTH);
            made++;
            this.data.add(t);
        }
        if(this.L2 && made < 2){
-           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
+           var t = new THREE.Mesh(new THREE.CubeGeometry(80,125,80), boxMaterial);
            t.translateX(0);
            made++;
            this.data.add(t);
        }
        if(this.L3 && made < 2){
-           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
+           var t = new THREE.Mesh(new THREE.CubeGeometry(80,125,80), boxMaterial);
            t.translateX(TRACK_WIDTH);
            made++;
            this.data.add(t);
@@ -169,7 +169,7 @@ function initScene() {
       ob5.generate();
 
    var playerMaterial = new THREE.MeshLambertMaterial( { map: playerTexture} )
-   player = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 16),playerMaterial);
+   player = new THREE.Mesh(new THREE.SphereGeometry(50, 16, 16),playerMaterial);
    player.translateZ(25);  //moves the player back a bit
    gScene.add(player);
    ob1.data.translateZ(START_OBSTACLE_DISTANCE -0*OBLINE_SEPERATION);
@@ -192,7 +192,7 @@ function update() {
     ob4.data.translateZ(speed);
     ob5.data.translateZ(speed);
 
-    if(ob1.data.position.z >= 0 ){
+    if(ob1.data.position.z >= 40 && ob1.data.position.z <= 60){
         switch(playerLoc){
             case 0:
             if(ob1.L1){confirm("You Died after " + distance + " obstacles.");paused = true;}
@@ -207,6 +207,8 @@ function update() {
 
                 break;
         }
+    }/**/
+    if(ob1.data.position.z >= 200){
         gScene.remove(ob1.data);
         gScene.remove(ob2.data);
         gScene.remove(ob3.data);
@@ -218,14 +220,14 @@ function update() {
         ob4 = ob5;
         ob5 = new obLine();
         ob5.generate();
-        ob5.data.translateZ(START_OBSTACLE_DISTANCE - 4 * OBLINE_SEPERATION);
+        ob5.data.translateZ(START_OBSTACLE_DISTANCE - 3 * OBLINE_SEPERATION);
         gScene.add(ob1.data);
         gScene.add(ob2.data);
         gScene.add(ob3.data);
         gScene.add(ob4.data);
         gScene.add(ob5.data);
         distance++;
-        speed = (Math.round(distance / 2) + 5);
+        speed = (Math.round(distance / 6) + 5);
     }
 
 }
@@ -253,5 +255,22 @@ $('body').keyup(function(e){
        paused = !paused;
        $('#pauseMenu').toggle();
    }
+
+    if(ob1.data.position.z >= 40 && ob1.data.position.z <= 60 ){
+        switch(playerLoc){
+            case 0:
+                if(ob1.L1){confirm("you Died after " + distance + " obstacles.");paused = true;}
+
+                break;
+            case 1:
+                if(ob1.L2){confirm("you Died after " + distance + " obstacles.");paused = true;}
+
+                break;
+            case 2:
+                if(ob1.L3){confirm("you Died after " + distance + " obstacles.");paused = true;}
+
+                break;
+        }
+    }
 });
 
