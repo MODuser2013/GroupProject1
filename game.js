@@ -16,8 +16,9 @@
    var obChance = .5;
    var OBLINE_SEPERATION = 300;
    var START_OBSTACLE_DISTANCE = -300;
-   var numTracks = 7;//must be odd
+   var numTracks = 5;//must be odd
    var playerLoc = (numTracks-1)/2;
+   var SCENE_WIDTH = 600;
 
    function obLine(){
        //var data = new THREE.Object3D();
@@ -116,6 +117,8 @@ function initTHREE() {
     gRenderer = renderer;
 }
 function initScene() {
+    playerLoc = (numTracks-1)/2;
+
    gCamera.translateY(300); //move above to give perspective
    gCamera.rotation.x = -0.6;
    gCamera.translateZ(-25);
@@ -135,7 +138,7 @@ function initScene() {
    gScene.add(player);
 
     var floorMaterial = new THREE.MeshLambertMaterial( { map: floorTexture} );
-    var floor = new THREE.Mesh(new THREE.PlaneGeometry(600,2500), floorMaterial);
+    var floor = new THREE.Mesh(new THREE.PlaneGeometry(SCENE_WIDTH,2500), floorMaterial);
     floor.rotation.x = -1.6;
     floor.translateZ(-500);
     floor.translateY(-88);
