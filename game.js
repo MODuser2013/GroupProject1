@@ -5,6 +5,7 @@
    var updateTimer;
    var playerTexture = THREE.ImageUtils.loadTexture( 'moon.jpg' );
    var boxTexture = THREE.ImageUtils.loadTexture( 'crate.gif' );
+   var floorTexture = THREE.ImageUtils.loadTexture( 'path.jpg' );
    var boxMaterial = new THREE.MeshLambertMaterial( { map: boxTexture} )
    var player;
 
@@ -168,10 +169,18 @@ function initScene() {
       ob4.generate();
       ob5.generate();
 
-   var playerMaterial = new THREE.MeshLambertMaterial( { map: playerTexture} )
+   var playerMaterial = new THREE.MeshLambertMaterial( { map: playerTexture} );
    player = new THREE.Mesh(new THREE.SphereGeometry(50, 16, 16),playerMaterial);
    player.translateZ(25);  //moves the player back a bit
    gScene.add(player);
+
+    var floorMaterial = new THREE.MeshLambertMaterial( { map: floorTexture} );
+    var floor = new THREE.Mesh(new THREE.PlaneGeometry(400,2500), floorMaterial);
+    floor.rotation.x = -1.6;
+    floor.translateZ(-500);
+    floor.translateY(-88);
+
+    gScene.add(floor);
    ob1.data.translateZ(START_OBSTACLE_DISTANCE -0*OBLINE_SEPERATION);
    ob2.data.translateZ(START_OBSTACLE_DISTANCE -1*OBLINE_SEPERATION);
    ob3.data.translateZ(START_OBSTACLE_DISTANCE -2*OBLINE_SEPERATION);
