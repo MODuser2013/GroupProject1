@@ -1,5 +1,5 @@
 function Ctrl($scope){
-	if(localStorage['highScores'] == undefined) localStorage['highScores'] = "{'scores':[]}";
+	if(typeof localStorage['highScores'] == 'undefined') localStorage['highScores'] = '{"scores":[]}';
 	$scope.localHS = JSON.parse(localStorage['highScores']).scores;
 	if($scope.localHS == undefined) $scope.localHS = new Array();
 	
