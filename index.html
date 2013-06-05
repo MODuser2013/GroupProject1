@@ -19,7 +19,6 @@
             width: 700px;
             position: absolute;
             background: lightGray;
-            display: none;
             text-align: center;
         }
         #pauseMenu{
@@ -27,7 +26,7 @@
             width: 700px;
             position: absolute;
             background: lightGray;
-            <!--display: none;-->
+            display: none;
             text-align: center;
             opacity: .8;
         }
@@ -57,7 +56,12 @@
 	</ol>
 </div>
 
-<div id="menu">Menu</div>
+<div id="menu">
+    <h2>Select number of Tracks</h2>
+    <div id='3play'>Play with 3 Tracks</div>
+    <br><br>
+    <div id='5play'>Play with 5 Tracks</div>
+</div>
 <div id="pauseMenu">Paused</div>
 <div id="newHS">
     <h3>New High Score</h3>
@@ -75,7 +79,22 @@
 <script src="angular.min.js"></script>
 <script src="highscores.js"></script>
 
-<script>main(); // runs main function</script>
+<script>
+    $('#3play').click(function(){
+        numTracks = 3;
+        SCENE_WIDTH = 350;
+        $('#menu').hide();
+        paused = false;
+        main();
+    });
+    $('#5play').click(function(){
+        numTracks = 5;
+        SCENE_WIDTH = 600;
+        $('#menu').hide();
+        paused = false;
+        main();
+    });
+</script>
 
 
 </body>
