@@ -16,12 +16,14 @@
    var obChance = .5;
    var OBLINE_SEPERATION = 300;
    var START_OBSTACLE_DISTANCE = -300;
-   var playerLoc = 1;
+   var playerLoc = 2;
 
    function obLine(){
        var L1 = false;
        var L2 = false;
        var L3 = false;
+       var L4 = false;
+       var L5 = false;
        //var data = new THREE.Object3D();
        var distance = 0;
    }
@@ -30,37 +32,56 @@
        var a = Math.random() > obChance;
        var b = Math.random() > obChance;
        var c = Math.random() > obChance;
-       while(  ( !a && !b && !c ) || (a && b && c)  ){
+       var d = Math.random() > obChance;
+       var e = Math.random() > obChance;
+       /*while(  ( !a && !b && !c ) || (a && b && c)  ){
            a = Math.random() > obChance;
            b = Math.random() > obChance;
            c = Math.random() > obChance;
-       }
+       }  */
        this.L1 = a;
        this.L2 = b;
        this.L3 = c;
+       this.L4 = d;
+       this.L5 = e;
        var made = 0;
 
-       if(this.L1 && made < 2){
+       if(this.L1 && made < 4){
+           var t = new THREE.Mesh(new THREE.CubeGeometry(80,125,80), boxMaterial);
+           t.translateX(-TRACK_WIDTH*2);
+           made++;
+           this.data.add(t);
+       }
+       if(this.L2 && made < 4){
            var t = new THREE.Mesh(new THREE.CubeGeometry(80,125,80), boxMaterial);
            t.translateX(-TRACK_WIDTH);
            made++;
            this.data.add(t);
        }
-       if(this.L2 && made < 2){
+       if(this.L3 && made < 4){
            var t = new THREE.Mesh(new THREE.CubeGeometry(80,125,80), boxMaterial);
            t.translateX(0);
            made++;
            this.data.add(t);
        }
-       if(this.L3 && made < 2){
+       if(this.L4 && made < 4){
            var t = new THREE.Mesh(new THREE.CubeGeometry(80,125,80), boxMaterial);
            t.translateX(TRACK_WIDTH);
            made++;
            this.data.add(t);
        }
+       if(this.L5 && made < 4){
+           var t = new THREE.Mesh(new THREE.CubeGeometry(80,125,80), boxMaterial);
+           t.translateX(TRACK_WIDTH*2);
+           made++;
+           this.data.add(t);
+       }
+       else if(made >= 4){
+           this.L5 = false;
+       }
        //console.log(made);
-       if(made < 2) {
-           var rndFinal = Math.random * 3;
+       /* if(made < 4) {
+           var rndFinal = Math.random * 5;
            var spot = 1;
            if(rndFinal <= 1){spot--;}
            if(rndFinal >= 2){spot++;}
@@ -70,23 +91,10 @@
            var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(trans);
            this.data.add(t);
-       }  /* */
+       }  */
    }
 
 
-   obLine.prototype.isCollided = function(track){
-    switch(track){
-        case 0:
-            return this.cOne;
-        break;
-        case 1:
-            return this.cTwo;
-        break;
-        case 2:
-            return this.cThree;
-        break;
-    }
-   };
 
 
 
@@ -175,7 +183,7 @@ function initScene() {
    gScene.add(player);
 
     var floorMaterial = new THREE.MeshLambertMaterial( { map: floorTexture} );
-    var floor = new THREE.Mesh(new THREE.PlaneGeometry(400,2500), floorMaterial);
+    var floor = new THREE.Mesh(new THREE.PlaneGeometry(600,2500), floorMaterial);
     floor.rotation.x = -1.6;
     floor.translateZ(-500);
     floor.translateY(-88);
@@ -202,17 +210,26 @@ function update() {
     ob5.data.translateZ(speed);
 
     if(ob1.data.position.z >= 40 && ob1.data.position.z <= 60){
+        console.log(ob1);
         switch(playerLoc){
             case 0:
-            if(ob1.L1){confirm("You Died after " + distance + " obstacles.");paused = true;gameOver=true;}
+                if(ob1.L1){confirm("you Died after " + distance + " obstacles. 1->" + playerLoc);paused = true;gameOver=true;}
 
-            break;
+                break;
             case 1:
-            if(ob1.L2){confirm("You Died after " + distance + " obstacles.");paused = true;gameOver=true;}
+                if(ob1.L2){confirm("you Died after " + distance + " obstacles. 2->" + playerLoc);paused = true;gameOver=true;}
 
                 break;
             case 2:
-            if(ob1.L3){confirm("You Died after " + distance + " obstacles.");paused = true;gameOver=true;}
+                if(ob1.L3){confirm("you Died after " + distance + " obstacles. 3->" + playerLoc);paused = true;gameOver=true;}
+
+                break;
+            case 3:
+                if(ob1.L4){confirm("you Died after " + distance + " obstacles. 4->" + playerLoc);paused = true;gameOver=true;}
+
+                break;
+            case 4:
+                if(ob1.L5){confirm("you Died after " + distance + " obstacles. 5->" + playerLoc);paused = true;gameOver=true;}
 
                 break;
         }
@@ -256,11 +273,11 @@ function draw() {
     }
 }
 
-$('body').keyup(function(e){
-   if(e.which == 65 && player.position.x > -TRACK_WIDTH){  //a
+$('body').keydown(function(e){
+   if(e.which == 65 && player.position.x > -TRACK_WIDTH*2){  //a
        player.position.x -= TRACK_WIDTH;
        playerLoc--;
-   } else if(e.which == 68 && player.position.x < TRACK_WIDTH){ //d
+   } else if(e.which == 68 && player.position.x < TRACK_WIDTH*2){ //d
        player.position.x += TRACK_WIDTH;
        playerLoc++;
    } else if(e.which == 80){
@@ -280,6 +297,14 @@ $('body').keyup(function(e){
                 break;
             case 2:
                 if(ob1.L3){confirm("you Died after " + distance + " obstacles.");paused = true;gameOver=true;}
+
+                break;
+            case 3:
+                if(ob1.L4){confirm("you Died after " + distance + " obstacles.");paused = true;gameOver=true;}
+
+                break;
+            case 4:
+                if(ob1.L5){confirm("you Died after " + distance + " obstacles.");paused = true;gameOver=true;}
 
                 break;
         }
