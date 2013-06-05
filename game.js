@@ -13,12 +13,45 @@
    var distance = 0;
    var obChance = .5;
 
-   function obLine(){}
-   obLine.prototype.L1 = false;
-   obLine.prototype.L2 = false;
-   obLine.prototype.L3 = false;
-   obLine.prototype.data = new THREE.Object3D();
-   obLine.prototype.distance = 0; //the z value to provide easy access
+   function obLine(){
+       var L1 = false;
+       var L2 = false;
+       var L3 = false;
+       var data = new THREE.Object3D();
+       var distance = 0;
+       function generate() {
+           var a = Math.random() > obChance;
+           var b = Math.random() > obChance;
+           var c = Math.random() > obChance;
+           while(  ( !a && !b && !c ) || (a && b && c)  ){
+               a = Math.random() > obChance;
+               b = Math.random() > obChance;
+               c = Math.random() > obChance;
+           }
+           this.L1 = a;
+           this.L2 = b;
+           this.L3 = c;
+
+           if(this.L1){
+               var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
+               t.translateX(-TRACK_WIDTH);
+               this.data.add(t);
+           }
+           if(this.L2){
+               var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
+               t.translateX(0);
+               this.data.add(t);
+           }
+           if(this.L3){
+               var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
+               t.translateX(TRACK_WIDTH);
+               this.data.add(t);
+           }
+       }
+
+   }
+
+
    obLine.prototype.isCollided = function(track){
     switch(track){
         case 0:
@@ -32,37 +65,14 @@
         break;
     }
    };
-   obLine.prototype.generate = function(){
-       var a = Math.random() > obChance;
-       var b = Math.random() > obChance;
-       var c = Math.random() > obChance;
-       while(  ( !a && !b && !c ) || (a && b && c)  ){
-           a = Math.random() > obChance;
-           b = Math.random() > obChance;
-           c = Math.random() > obChance;
-       }
-       this.L1 = a;
-       this.L2 = b;
-       this.L3 = c;
 
-       if(this.L1){
-           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
-           t.translateX(-TRACK_WIDTH);
-           this.data.add(t);
-       }
-       if(this.L2){
-           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
-           t.translateX(0);
-           this.data.add(t);
-       }
-       if(this.L3){
-           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
-           t.translateX(TRACK_WIDTH);
-           this.data.add(t);
-       }
-   };
 
-   var test = new obLine();
+
+    var ob1 = new obLine();
+    var ob2 = new obLine();
+    var ob3 = new obLine();
+    var ob4 = new obLine();
+    var ob5 = new obLine();
 
    //TODO add in movement controls
    //TODO add in collision checking
@@ -132,23 +142,38 @@ function initScene() {
    gCamera.translateZ(-25);
 
 
+      ob1.generate();
+      ob2.generate();
+      ob3.generate();
+      ob4.generate();
+      ob5.generate();
+
    var playerMaterial = new THREE.MeshLambertMaterial( { map: playerTexture} )
    player = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 16),playerMaterial);
    player.translateZ(25);  //moves the player back a bit
    gScene.add(player);
-
-
-
-    test.generate();
-    test.data.translateZ(-100);
-    gScene.add(test.data);
-    console.log(test);
+     ob1.data.translateX(75);
+      /*ob2.data.translateZ(200);
+     ob3.data.translateZ(300);
+     ob4.data.translateZ(400);
+     ob5.data.translateZ(500);*/
+    console.log(gScene);
+    gScene.add(ob1.data);
+    gScene.add(ob2.data);
+    gScene.add(ob3.data);
+    gScene.add(ob4.data);
+    gScene.add(ob5.data);
+    console.log(gScene);
 }
 function update() {
-         //updates location of all 'obstacles' objects, checks collisions, removes hidden, adds new
-         test.data.translateZ(speed); //this is what brings the boxes to the player, the value can be incremented to increase difficulty
+
+    //test.data.translateZ(speed); //this is what brings the boxes to the player, the value can be incremented to increase difficulty
          distance+= speed;
 }
+
+ function spawnOb() {
+
+ }
 
 function draw() {
     if(!paused)
