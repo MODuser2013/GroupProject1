@@ -49,11 +49,11 @@
     <h1 id="score">Current Score: 0</h1>
     <h2>Local High Scores</h2>
     <ol>
-        <li ng-repeat="l in localHS">{{l.name}} - {{l.score}}</li>
+        <li ng-repeat="l in localHS"><span ng-bind="l.name"></span> - <span ng-bind="l.score"></span></li>
     </ol>
 	<h2>Global High Scores</h2>
 	<ol>
-		<li ng-repeat="g in globalHS">{{g.Name}} - {{g.Score}}</li>
+		<li ng-repeat="g in globalHS"><span ng-bind="g.Name"></span> - <span ng-bind="g.Score"></span></li>
 	</ol>
 </div>
 
