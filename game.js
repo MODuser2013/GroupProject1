@@ -12,43 +12,44 @@
    var speed = 1;
    var distance = 0;
    var obChance = .5;
+   var OBLINE_SEPERATION = 300;
+   var START_OBSTACLE_DISTANCE = -300;
 
    function obLine(){
        var L1 = false;
        var L2 = false;
        var L3 = false;
-       var data = new THREE.Object3D();
+       //var data = new THREE.Object3D();
        var distance = 0;
-       function generate() {
-           var a = Math.random() > obChance;
-           var b = Math.random() > obChance;
-           var c = Math.random() > obChance;
-           while(  ( !a && !b && !c ) || (a && b && c)  ){
-               a = Math.random() > obChance;
-               b = Math.random() > obChance;
-               c = Math.random() > obChance;
-           }
-           this.L1 = a;
-           this.L2 = b;
-           this.L3 = c;
-
-           if(this.L1){
-               var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
-               t.translateX(-TRACK_WIDTH);
-               this.data.add(t);
-           }
-           if(this.L2){
-               var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
-               t.translateX(0);
-               this.data.add(t);
-           }
-           if(this.L3){
-               var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
-               t.translateX(TRACK_WIDTH);
-               this.data.add(t);
-           }
+   }
+   obLine.prototype.generate = function(){
+       this.data = new THREE.Object3D();
+       var a = Math.random() > obChance;
+       var b = Math.random() > obChance;
+       var c = Math.random() > obChance;
+       while(  ( !a && !b && !c ) || (a && b && c)  ){
+           a = Math.random() > obChance;
+           b = Math.random() > obChance;
+           c = Math.random() > obChance;
        }
-
+       this.L1 = a;
+       this.L2 = b;
+       this.L3 = c;
+       if(this.L1){
+           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
+           t.translateX(-TRACK_WIDTH);
+           this.data.add(t);
+       }
+       if(this.L2){
+           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
+           t.translateX(0);
+           this.data.add(t);
+       }
+       if(this.L3){
+           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
+           t.translateX(TRACK_WIDTH);
+           this.data.add(t);
+       }
    }
 
 
@@ -152,11 +153,11 @@ function initScene() {
    player = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 16),playerMaterial);
    player.translateZ(25);  //moves the player back a bit
    gScene.add(player);
-     ob1.data.translateX(75);
-      /*ob2.data.translateZ(200);
-     ob3.data.translateZ(300);
-     ob4.data.translateZ(400);
-     ob5.data.translateZ(500);*/
+   ob1.data.translateZ(START_OBSTACLE_DISTANCE -0*OBLINE_SEPERATION);
+   ob2.data.translateZ(START_OBSTACLE_DISTANCE -1*OBLINE_SEPERATION);
+   ob3.data.translateZ(START_OBSTACLE_DISTANCE -2*OBLINE_SEPERATION);
+   ob4.data.translateZ(START_OBSTACLE_DISTANCE -3*OBLINE_SEPERATION);
+   ob5.data.translateZ(START_OBSTACLE_DISTANCE -4*OBLINE_SEPERATION);
     console.log(gScene);
     gScene.add(ob1.data);
     gScene.add(ob2.data);
