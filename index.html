@@ -45,10 +45,14 @@
 <div id="canvas"></div>
 
 <div id="highScores">
-    <h2>High Scores</h2>
+    <h2>Local High Scores</h2>
     <ol>
         <li ng-repeat="l in localHS">{{l.name}} - {{l.score}}</li>
     </ol>
+	<h2>Global High Scores</h2>
+	<ol>
+		<li ng-repeat="g in globalHS">{{g.Name}} - {{g.Score}}</li>
+	</ol>
 </div>
 
 <div id="menu">Menu</div>
