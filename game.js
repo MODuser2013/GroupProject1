@@ -163,7 +163,6 @@ function initScene() {
    gCamera.rotation.x = -0.6;
    gCamera.translateZ(-25);
 
-
       ob1.generate();
       ob2.generate();
       ob3.generate();
@@ -238,6 +237,7 @@ function update() {
         gScene.add(ob5.data);
         distance++;
         speed = (Math.round(distance / 6) + 5);
+        document.getElementById('score').innerHTML = 'Current Score: ' + distance;
     }
 
 }

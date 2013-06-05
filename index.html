@@ -9,6 +9,7 @@
             height: 500px;
             float: left;
         }
+
         #highScores {
             float: left;
             margin-left: 10%;
@@ -41,10 +42,11 @@
     </style>
 </head>
 <body ng-app ng-controller="Ctrl">
-<h3>Instructions: 'P' = start/pause  'W'= Move Left   'D' = Move Right</h3>
+<h3>Instructions: 'P' = start/pause  'A'= Move Left   'D' = Move Right</h3>
 <div id="canvas"></div>
 
 <div id="highScores">
+    <h1 id="score">Current Score: 0</h1>
     <h2>Local High Scores</h2>
     <ol>
         <li ng-repeat="l in localHS">{{l.name}} - {{l.score}}</li>
