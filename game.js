@@ -250,6 +250,7 @@ function draw() {
     }
     else {
      $("#newHS").show();
+	 $("#newHSScore").text(distance);
     }
 }
 

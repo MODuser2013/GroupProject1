@@ -1,8 +1,11 @@
 function Ctrl($scope){
-    $scope.localHS = JSON.parse(localStorage['highScores']).scores;
+	if(localStorage['highScores'] == undefined) localStorage['highScores'] = "{'scores':[]}";
+	$scope.localHS = JSON.parse(localStorage['highScores']).scores;
+	if($scope.localHS == undefined) $scope.localHS = new Array();
 
     $scope.newHS = function(){
-        $scope.localHS.push({"name":$scope.newHSName, "score":distance});
+        console.log($scope);
+		$scope.localHS.push({"name":$scope.newHSName, "score":distance});
         $scope.localHS = $scope.localHS.sort(highScoreSortFunction);
         if($scope.localHS.length > 10) $scope.localHS.splice(10);
         localStorage['highScores'] = JSON.stringify({"scores": $scope.localHS});
