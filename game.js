@@ -58,7 +58,7 @@
            made++;
            this.data.add(t);
        }
-       console.log(made);
+       //console.log(made);
        if(made < 2) {
            var rndFinal = Math.random * 3;
            var spot = 1;
@@ -230,7 +230,7 @@ function update() {
         ob4 = ob5;
         ob5 = new obLine();
         ob5.generate();
-        ob5.data.translateZ(START_OBSTACLE_DISTANCE - 3 * OBLINE_SEPERATION);
+        ob5.data.translateZ(ob4.data.position.z - 1 * OBLINE_SEPERATION);
         gScene.add(ob1.data);
         gScene.add(ob2.data);
         gScene.add(ob3.data);
