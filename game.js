@@ -1,13 +1,14 @@
    var gScene;
    var gCamera;
    var gRenderer;
-   var paused = false;
+   var paused = true;
    var updateTimer;
    var playerTexture = THREE.ImageUtils.loadTexture( 'moon.jpg' );
    var boxTexture = THREE.ImageUtils.loadTexture( 'crate.gif' );
    var floorTexture = THREE.ImageUtils.loadTexture( 'path.jpg' );
    var boxMaterial = new THREE.MeshLambertMaterial( { map: boxTexture} )
    var player;
+   var gameOver = false;
 
    var TRACK_WIDTH = 90;
    var speed = 5;
@@ -57,7 +58,7 @@
            made++;
            this.data.add(t);
        }
-      /* console.log(made);
+       console.log(made);
        if(made < 2) {
            var rndFinal = Math.random * 3;
            var spot = 1;
@@ -69,7 +70,7 @@
            var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(trans);
            this.data.add(t);
-       }   */
+       }  /* */
    }
 
 
@@ -204,15 +205,15 @@ function update() {
     if(ob1.data.position.z >= 40 && ob1.data.position.z <= 60){
         switch(playerLoc){
             case 0:
-            if(ob1.L1){confirm("You Died after " + distance + " obstacles.");paused = true;}
+            if(ob1.L1){confirm("You Died after " + distance + " obstacles.");paused = true;gameOver=true;}
 
             break;
             case 1:
-            if(ob1.L2){confirm("You Died after " + distance + " obstacles.");paused = true;}
+            if(ob1.L2){confirm("You Died after " + distance + " obstacles.");paused = true;gameOver=true;}
 
                 break;
             case 2:
-            if(ob1.L3){confirm("You Died after " + distance + " obstacles.");paused = true;}
+            if(ob1.L3){confirm("You Died after " + distance + " obstacles.");paused = true;gameOver=true;}
 
                 break;
         }
@@ -248,9 +249,10 @@ function draw() {
     update();
     gRenderer.render(gScene,gCamera);
     }
-    else {
-     $("#newHS").show();
-	 $("#newHSScore").text(distance);
+
+    if(gameOver){
+        $("#newHS").show();
+        $("#newHSScore").text(distance);
     }
 }
 
@@ -269,15 +271,15 @@ $('body').keyup(function(e){
     if(ob1.data.position.z >= 40 && ob1.data.position.z <= 60 && !paused){
         switch(playerLoc){
             case 0:
-                if(ob1.L1){confirm("you Died after " + distance + " obstacles.");paused = true;}
+                if(ob1.L1){confirm("you Died after " + distance + " obstacles.");paused = true;gameOver=true;}
 
                 break;
             case 1:
-                if(ob1.L2){confirm("you Died after " + distance + " obstacles.");paused = true;}
+                if(ob1.L2){confirm("you Died after " + distance + " obstacles.");paused = true;gameOver=true;}
 
                 break;
             case 2:
-                if(ob1.L3){confirm("you Died after " + distance + " obstacles.");paused = true;}
+                if(ob1.L3){confirm("you Died after " + distance + " obstacles.");paused = true;gameOver=true;}
 
                 break;
         }
