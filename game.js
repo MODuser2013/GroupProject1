@@ -9,11 +9,12 @@
    var player;
 
    var TRACK_WIDTH = 90;
-   var speed = 1;
+   var speed = 5;
    var distance = 0;
    var obChance = .5;
    var OBLINE_SEPERATION = 300;
    var START_OBSTACLE_DISTANCE = -300;
+   var playerLoc = 1;
 
    function obLine(){
        var L1 = false;
@@ -35,21 +36,39 @@
        this.L1 = a;
        this.L2 = b;
        this.L3 = c;
-       if(this.L1){
+       var made = 0;
+
+       if(this.L1 && made < 2){
            var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(-TRACK_WIDTH);
+           made++;
            this.data.add(t);
        }
-       if(this.L2){
+       if(this.L2 && made < 2){
            var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(0);
+           made++;
            this.data.add(t);
        }
-       if(this.L3){
+       if(this.L3 && made < 2){
            var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
            t.translateX(TRACK_WIDTH);
+           made++;
            this.data.add(t);
        }
+      /* console.log(made);
+       if(made < 2) {
+           var rndFinal = Math.random * 3;
+           var spot = 1;
+           if(rndFinal <= 1){spot--;}
+           if(rndFinal >= 2){spot++;}
+
+           spot--;
+           var trans = TRACK_WIDTH * spot;
+           var t = new THREE.Mesh(new THREE.CubeGeometry(75,125,75), boxMaterial);
+           t.translateX(trans);
+           this.data.add(t);
+       }   */
    }
 
 
@@ -158,23 +177,59 @@ function initScene() {
    ob3.data.translateZ(START_OBSTACLE_DISTANCE -2*OBLINE_SEPERATION);
    ob4.data.translateZ(START_OBSTACLE_DISTANCE -3*OBLINE_SEPERATION);
    ob5.data.translateZ(START_OBSTACLE_DISTANCE -4*OBLINE_SEPERATION);
-    console.log(gScene);
+    //console.log(gScene);
     gScene.add(ob1.data);
     gScene.add(ob2.data);
     gScene.add(ob3.data);
     gScene.add(ob4.data);
     gScene.add(ob5.data);
-    console.log(gScene);
+    //console.log(gScene);
 }
 function update() {
+    ob1.data.translateZ(speed);
+    ob2.data.translateZ(speed);
+    ob3.data.translateZ(speed);
+    ob4.data.translateZ(speed);
+    ob5.data.translateZ(speed);
 
-    //test.data.translateZ(speed); //this is what brings the boxes to the player, the value can be incremented to increase difficulty
-         distance+= speed;
+    if(ob1.data.position.z >= 0 ){
+        switch(playerLoc){
+            case 0:
+            if(ob1.L1){confirm("You Died after " + distance + " obstacles.");paused = true;}
+
+            break;
+            case 1:
+            if(ob1.L2){confirm("You Died after " + distance + " obstacles.");paused = true;}
+
+                break;
+            case 2:
+            if(ob1.L3){confirm("You Died after " + distance + " obstacles.");paused = true;}
+
+                break;
+        }
+        gScene.remove(ob1.data);
+        gScene.remove(ob2.data);
+        gScene.remove(ob3.data);
+        gScene.remove(ob4.data);
+        gScene.remove(ob5.data);
+        ob1 = ob2;
+        ob2 = ob3;
+        ob3 = ob4;
+        ob4 = ob5;
+        ob5 = new obLine();
+        ob5.generate();
+        ob5.data.translateZ(START_OBSTACLE_DISTANCE - 4 * OBLINE_SEPERATION);
+        gScene.add(ob1.data);
+        gScene.add(ob2.data);
+        gScene.add(ob3.data);
+        gScene.add(ob4.data);
+        gScene.add(ob5.data);
+        distance++;
+        speed = (Math.round(distance / 2) + 5);
+    }
+
 }
 
- function spawnOb() {
-
- }
 
 function draw() {
     if(!paused)
@@ -182,13 +237,18 @@ function draw() {
     update();
     gRenderer.render(gScene,gCamera);
     }
+    else {
+     $("#newHS").show();
+    }
 }
 
 $('body').keyup(function(e){
    if(e.which == 65 && player.position.x > -TRACK_WIDTH){  //a
        player.position.x -= TRACK_WIDTH;
+       playerLoc--;
    } else if(e.which == 68 && player.position.x < TRACK_WIDTH){ //d
        player.position.x += TRACK_WIDTH;
+       playerLoc++;
    } else if(e.which == 80){
        paused = !paused;
        $('#pauseMenu').toggle();
