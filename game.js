@@ -265,7 +265,7 @@ $('body').keyup(function(e){
        $('#pauseMenu').toggle();
    }
 
-    if(ob1.data.position.z >= 40 && ob1.data.position.z <= 60 ){
+    if(ob1.data.position.z >= 40 && ob1.data.position.z <= 60 && !paused){
         switch(playerLoc){
             case 0:
                 if(ob1.L1){confirm("you Died after " + distance + " obstacles.");paused = true;}
