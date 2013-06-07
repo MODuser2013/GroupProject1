@@ -6,6 +6,7 @@ app.controller("Ctrl", function($scope){
         var data = getGameData();
         var curNT = numTracks;
         numTracks = 0;
+        if(curNT == 0) return false;
         if(cheatCheck(data)){
             alert('You cheated');
             return false;
