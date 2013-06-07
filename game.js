@@ -224,7 +224,7 @@ $('body').keydown(function(e){
    }
 
     if(ob1.data.position.z >= 40 && ob1.data.position.z <= 60 && !paused){
-        if(ob1.LArray[playerLoc]){confirm("you Died after " + distance + " obstacles. 1->" + playerLoc);paused = true;gameOver=true;}
+        if(ob1.LArray[playerLoc]){confirm("you Died after " + distance + " obstacles.");paused = true;gameOver=true;}
     }
 });
 

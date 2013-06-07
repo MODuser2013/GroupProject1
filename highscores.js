@@ -1,20 +1,40 @@
-function Ctrl($scope){
-	if(typeof localStorage['highScores'] == 'undefined') localStorage['highScores'] = '{"scores":[]}';
-	$scope.localHS = JSON.parse(localStorage['highScores']).scores;
-	if($scope.localHS == undefined) $scope.localHS = new Array();
-	
+var app = angular.module("RunningGame", []);
+
+app.controller("Ctrl", function($scope){
+
     $scope.newHS = function(){
-        console.log($scope);
-		$scope.localHS.push({"name":$scope.newHSName, "score":distance});
+        $scope.localHS.push({"name":$scope.newHSName, "score":distance});
         $scope.localHS = $scope.localHS.sort(highScoreSortFunction);
         if($scope.localHS.length > 10) $scope.localHS.splice(10);
-        localStorage['highScores'] = JSON.stringify({"scores": $scope.localHS});
-		if($scope.accomplishedGlobalHS){
-			$.get("server.php",{"name":$scope.newHSName, "score":distance}, function(){
-				location.reload();
-			});
-		}
+        localStorage['highScores-'+numTracks] = JSON.stringify({"scores": $scope.localHS});
+        if($scope.accomplishedGlobalHS){
+            $.post("server.php",{"name":$scope.newHSName, "score":distance, "tracks":numTracks}, function(){
+                location.reload();
+            },function(){
+                location.reload();
+            });
+        }
     };
+
+    $scope.play3 = function(){
+        numTracks = 3;
+        SCENE_WIDTH = 350;
+        $('#menu').hide();
+        paused = false;
+        main();
+        $scope.reloadGlobal(3);
+        $scope.reloadLocal(3);
+    }
+
+    $scope.play5 = function(){
+        numTracks = 5;
+        SCENE_WIDTH = 600;
+        $('#menu').hide();
+        paused = false;
+        main();
+        $scope.reloadGlobal(5);
+        $scope.reloadLocal(5);
+    }
 
     $scope.number = function(){
         return $scope.localHS.length;
@@ -24,23 +44,27 @@ function Ctrl($scope){
         if($scope.localHS.length < 10) return true;
         return newScore > $scope.localHS[$scope.localHS.length-1].score;
     };
-	
-	$scope.accomplishedGlobalHS = function(newScore){
+
+    $scope.accomplishedGlobalHS = function(newScore){
         if($scope.globalHS.length < 10) return true;
         return newScore > $scope.globalHS[$scope.globalHS.length-1].score;
     };
-	
-	$scope.reloadGlobal = function(){
-		$.get("server.php",{action:"get"}, function(data){
-			$scope.$apply(function(){
-				$scope.globalHS = JSON.parse(data);
-			});
-		});
-	};
-	
-	$scope.reloadGlobal();
 
-}
+    $scope.reloadLocal = function(tracks){
+        if(typeof localStorage['highScores-'+tracks] == 'undefined') localStorage['highScores-'+tracks] = '{"scores":[]}';
+        $scope.localHS = JSON.parse(localStorage['highScores-'+tracks]).scores;
+        if($scope.localHS == undefined) $scope.localHS = new Array();
+    }
+
+    $scope.reloadGlobal = function(tracks){
+        $.get("server.php",{action:"get", "tracks":tracks}, function(data){
+            $scope.$apply(function(){
+                $scope.globalHS = JSON.parse(data);
+            });
+        });
+    };
+
+});
 
 function highScoreSortFunction(a,b){
     return Number(b.score) - Number(a.score);

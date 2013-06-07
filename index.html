@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app='RunningGame'>
 <head>
     <title>This is a Running Game</title>
     <style>
@@ -41,7 +41,7 @@
     </style>
 
 </head>
-<body ng-app ng-controller="Ctrl">
+<body ng-controller="Ctrl">
 <script>
     function cheat(){
         document.write("Cheating is wrong! Don't do it!!!");
@@ -64,9 +64,9 @@
 
 <div id="menu">
     <h2>Select number of Tracks</h2>
-    <div id='3play'>Play with 3 Tracks</div>
+    <div id='3play' ng-click="play3()">Play with 3 Tracks</div>
     <br><br>
-    <div id='5play'>Play with 5 Tracks</div>
+    <div id='5play' ng-click="play5()">Play with 5 Tracks</div>
 </div>
 <div id="pauseMenu">Paused</div>
 <div id="newHS">
@@ -84,23 +84,6 @@
 <script src="game.js"></script>
 <script src="angular.min.js"></script>
 <script src="highscores.js"></script>
-
-<script>
-    $('#3play').click(function(){
-        numTracks = 3;
-        SCENE_WIDTH = 350;
-        $('#menu').hide();
-        paused = false;
-        main();
-    });
-    $('#5play').click(function(){
-        numTracks = 5;
-        SCENE_WIDTH = 600;
-        $('#menu').hide();
-        paused = false;
-        main();
-    });
-</script>
 
 
 </body>
