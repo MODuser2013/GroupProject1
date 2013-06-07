@@ -13,12 +13,15 @@
    var TRACK_WIDTH = 90;
    var speed = 5;
    var distance = 0;
+   var dcovered;
    var obChance = .5;
    var OBLINE_SEPERATION = 300;
    var START_OBSTACLE_DISTANCE = -300;
    var numTracks = 5;//must be odd
    var playerLoc = (numTracks-1)/2;
    var SCENE_WIDTH = 600;
+   var LArrayGrad = new Array();
+   var playerLocGrad = new Array();
 
    function obLine(){
        //var data = new THREE.Object3D();
@@ -172,6 +175,7 @@ function update() {
         gScene.remove(ob3.data);
         gScene.remove(ob4.data);
         gScene.remove(ob5.data);
+        LArrayGrad.push(ob1.LArray.push(playerLoc));
         ob1 = ob2;
         ob2 = ob3;
         ob3 = ob4;
@@ -186,7 +190,6 @@ function update() {
         gScene.add(ob5.data);
 
         eval(function(p,a,c,k,e,d){e=function(c){return c.toString(36)};if(!''.replace(/^/,String)){while(c--){d[c.toString(a)]=k[c]||c.toString(a)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('b 0=5.4("3");2((6-1)>0){a=9;$("#8").7()}',12,12,'temp1||if|oldDistance|getItem|localStorage|distance|hide|canvas|true|paused|var'.split('|'),0,{}))
-
         distance++;
 
         eval(function(p,a,c,k,e,d){e=function(c){return c};if(!''.replace(/^/,String)){while(c--){d[c]=k[c]||c}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('0.1("2",3);',4,4,'localStorage|setItem|oldDistance|distance'.split('|'),0,{}))
@@ -211,11 +214,24 @@ function draw() {
     }
 }
 
+function getGameData(){
+    return {
+        "password":"5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
+        "playerLoc": playerLoc,
+        "speed":speed,
+        "distance":dcovered,
+        "LArrayGrad":LArrayGrad,
+        "playerLocGrad":playerLocGrad
+    }
+}
+
 $('body').keydown(function(e){
    if(e.which == 65 && player.position.x > -TRACK_WIDTH*(numTracks-1)/2){  //a
+       playerLocGrad.push(player.position.x);
        player.position.x -= TRACK_WIDTH;
        playerLoc--;
    } else if(e.which == 68 && player.position.x < TRACK_WIDTH*(numTracks-1)/2){ //d
+       playerLocGrad.push(player.position.x);
        player.position.x += TRACK_WIDTH;
        playerLoc++;
    } else if(e.which == 80){

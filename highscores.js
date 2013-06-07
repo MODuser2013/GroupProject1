@@ -3,12 +3,17 @@ var app = angular.module("RunningGame", []);
 app.controller("Ctrl", function($scope){
 
     $scope.newHS = function(){
+        var data = getGameData();
+        if(cheatCheck(data)){
+            alert('You cheated');
+            return false;
+        }
         $scope.localHS.push({"name":$scope.newHSName, "score":distance});
         $scope.localHS = $scope.localHS.sort(highScoreSortFunction);
         if($scope.localHS.length > 10) $scope.localHS.splice(10);
         localStorage['highScores-'+numTracks] = JSON.stringify({"scores": $scope.localHS});
         if($scope.accomplishedGlobalHS){
-            $.post("server.php",{"name":$scope.newHSName, "score":distance, "tracks":numTracks}, function(){
+            $.post("server.php",{"name":$scope.newHSName, "score":distance, "tracks":numTracks,"data":data}, function(){
                 location.reload();
             },function(){
                 location.reload();
@@ -68,4 +73,10 @@ app.controller("Ctrl", function($scope){
 
 function highScoreSortFunction(a,b){
     return Number(b.score) - Number(a.score);
+}
+
+function cheatCheck(data){
+  if(playerLoc<0 || playerLoc >=numTracks) return true;
+    if(distance > 500) return true;
+    return false;
 }
