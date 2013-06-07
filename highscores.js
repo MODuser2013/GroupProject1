@@ -4,6 +4,8 @@ app.controller("Ctrl", function($scope){
 
     $scope.newHS = function(){
         var data = getGameData();
+        var curNT = numTracks;
+        numTracks = 0;
         if(cheatCheck(data)){
             alert('You cheated');
             return false;
@@ -11,9 +13,9 @@ app.controller("Ctrl", function($scope){
         $scope.localHS.push({"name":$scope.newHSName, "score":distance});
         $scope.localHS = $scope.localHS.sort(highScoreSortFunction);
         if($scope.localHS.length > 10) $scope.localHS.splice(10);
-        localStorage['highScores-'+numTracks] = JSON.stringify({"scores": $scope.localHS});
+        localStorage['highScores-'+curNT] = JSON.stringify({"scores": $scope.localHS});
         if($scope.accomplishedGlobalHS){
-            $.post("server.php",{"name":$scope.newHSName, "score":distance, "tracks":numTracks,"data":data}, function(){
+            $.post("server.php",{"name":$scope.newHSName, "score":distance, "tracks":curNT,"data":data}, function(){
                 location.reload();
             },function(){
                 location.reload();
