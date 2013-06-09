@@ -2,6 +2,7 @@
 <html ng-app='RunningGame'>
 <head>
     <title>This is a Running Game</title>
+    <link type='text/css' rel='stylesheet' href='bootstrap/css/bootstrap.min.css'>
     <style>
         #canvas {
             background: #1b1e1b;
@@ -20,6 +21,7 @@
             position: absolute;
             background: lightGray;
             text-align: center;
+            top: 0px;
         }
         #pauseMenu{
             height: 500px;
@@ -29,6 +31,7 @@
             display: none;
             text-align: center;
             opacity: .8;
+            top: 0px;
         }
         #newHS{
             height: 500px;
@@ -37,6 +40,7 @@
             background: lightGray;
             display: none;
             text-align: center;
+            top: 0px;
         }
     </style>
 
@@ -47,39 +51,58 @@
         document.write("Cheating is wrong! Don't do it!!!");
     }
 </script>
-<h3>Instructions: 'P' = start/pause  'A'= Move Left   'D' = Move Right</h3>
-<div id="canvas"></div>
 
-<div id="highScores">
-    <h1 id="score">Current Score: 0</h1>
-    <h2>Local High Scores</h2>
-    <ol>
-        <li ng-repeat="l in localHS"><span ng-bind="l.name"></span> - <span ng-bind="l.score"></span></li>
-    </ol>
-	<h2>Global High Scores</h2>
-	<ol>
-		<li ng-repeat="g in globalHS"><span ng-bind="g.Name"></span> - <span ng-bind="g.Score"></span></li>
-	</ol>
-</div>
+
+
+
+<span style='clear: both; display: inline-block; width: 100%;'>
+    <div id="canvas"></div>
+
+    <div id="highScores">
+        <h1 id="score">Current Score: 0</h1>
+        <br>
+        <h2>Local High Scores</h2>
+        <ol>
+            <li ng-repeat="l in localHS"><span ng-bind="l.name"></span> - <span ng-bind="l.score"></span></li>
+        </ol>
+        <h2>Global High Scores</h2>
+        <ol>
+            <li ng-repeat="g in globalHS"><span ng-bind="g.Name"></span> - <span ng-bind="g.Score"></span></li>
+        </ol>
+    </div>
+</span>
+<div class='lead'>Instructions: 'P' = start/pause  'A'= Move Left   'D' = Move Right</div>
+
+
+
+
+
+
+
+
 
 <div id="menu">
     <h2>Select number of Tracks</h2>
-    <div id='3play' ng-click="play3()">Play with 3 Tracks</div>
+    <br>
+    <div id='3play' class='btn' ng-click="play3()">Play with 3 Tracks</div>
     <br><br>
-    <div id='5play' ng-click="play5()">Play with 5 Tracks</div>
+    <div id='5play' class='btn' ng-click="play5()">Play with 5 Tracks</div>
 </div>
 <div id="pauseMenu">Paused</div>
 <div id="newHS">
     <h3>New High Score</h3>
     <form ng-submit="newHS()">
-        <input type="text" ng-model="newHSName" placeholder="Name">
-        <input type="submit">
+        <span>
+            <input type="text" ng-model="newHSName" placeholder="Name">
+            <input type="submit" class='btn btn-primary' style='vertical-align: top;'>
+        </span>
     </form>
     <br><br>
-    Score: <span id="newHSScore"></span>
+    <span class='lead'>Score: <span id="newHSScore"></span></span>
 </div>
 
 <script src="jquery.min.js"></script>
+<script src='bootstrap/js/bootstrap.min.js'></script>
 <script src="Three.js"></script>
 <script src="game.js"></script>
 <script src="angular.min.js"></script>

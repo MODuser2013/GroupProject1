@@ -1,6 +1,38 @@
 var app = angular.module("RunningGame", []);
 
-app.controller("Ctrl", function($scope){
+
+app.factory('HSServer',function($http,$q){
+    return {
+        reloadGlobal: function(tracks){
+            var deferred = $q.defer();
+            $http({
+                url: "http://zachkimberg.com/games/Running_Game/server.php",
+                method: "get",
+                params: {action: "get", tracks: tracks}
+            }).success(function(response){
+                deferred.resolve(response);
+            }).error(function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        submitHS: function(data){
+            var deferred = $q.defer();
+            $http({
+                url: "http://zachkimberg.com/games/Running_Game/server.php",
+                method: "post",
+                params: data
+            }).success(function(response){
+               deferred.resolve(response);
+            }).error(function(error){
+               deferred.reject(error);
+            });
+            return deferred.promise;
+        }
+    }
+})
+
+app.controller("Ctrl", function($scope,HSServer){
 
     $scope.newHS = function(){
         var data = getGameData();
@@ -16,11 +48,8 @@ app.controller("Ctrl", function($scope){
         if($scope.localHS.length > 10) $scope.localHS.splice(10);
         localStorage['highScores-'+curNT] = JSON.stringify({"scores": $scope.localHS});
         if($scope.accomplishedGlobalHS){
-            $.post("server.php",{"name":$scope.newHSName, "score":distance, "tracks":curNT,"data":data}, function(){
-                location.reload();
-            },function(){
-                location.reload();
-            });
+            var serverData = {"name":$scope.newHSName, "score":distance, "tracks":curNT,"data":data};
+            $scope.submitHS(serverData);
         }
     };
 
@@ -64,22 +93,40 @@ app.controller("Ctrl", function($scope){
         if($scope.localHS == undefined) $scope.localHS = new Array();
     }
 
-    $scope.reloadGlobal = function(tracks){
+    /*$scope.reloadGlobal = function(tracks){
         $.get("server.php",{action:"get", "tracks":tracks}, function(data){
             $scope.$apply(function(){
                 $scope.globalHS = JSON.parse(data);
             });
         });
+    }; */
+    $scope.reloadGlobal = function(tracks){
+        HSServer.reloadGlobal(tracks).then(function(data){
+            $scope.globalHS = data;
+        },function(error){
+           console.log(error);
+        });
     };
 
+    $scope.submitHS = function(data){
+        HSServer.submitHS(data).then(function(response){
+            if(response != "") alert(response);
+            location.reload();
+        },function(error){
+            alert('Could not submit to server');
+            location.reload();
+        })
+    }
+
 });
+
 
 function highScoreSortFunction(a,b){
     return Number(b.score) - Number(a.score);
 }
 
 function cheatCheck(data){
-  if(playerLoc<0 || playerLoc >=numTracks) return true;
-    if(distance > 500) return true;
-    return false;
+  if(playerLoc<0 || playerLoc >=numTracks) return false;
+    if(distance > 500) return false;
+    return true;
 }
