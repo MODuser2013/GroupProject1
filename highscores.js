@@ -1,38 +1,36 @@
 var app = angular.module("RunningGame", []);
 
 
-app.factory('HSServer',function($http,$q){
+app.factory('HSServer',function($http){
     return {
         reloadGlobal: function(tracks){
-            var deferred = $q.defer();
-            $http({
+            return $http({
                 url: "http://zachkimberg.com/games/Running_Game/server.php",
                 method: "get",
                 params: {action: "get", tracks: tracks}
-            }).success(function(response){
-                deferred.resolve(response);
-            }).error(function(error){
-                deferred.reject(error);
             });
-            return deferred.promise;
         },
         submitHS: function(data){
-            var deferred = $q.defer();
-            $http({
+            return $http({
                 url: "http://zachkimberg.com/games/Running_Game/server.php",
                 method: "post",
                 params: data
-            }).success(function(response){
-               deferred.resolve(response);
-            }).error(function(error){
-               deferred.reject(error);
             });
-            return deferred.promise;
         }
     }
 })
 
 app.controller("Ctrl", function($scope,HSServer){
+
+    $scope.model = {mode: "menu"};
+    $scope.setMode = function(newMode){
+        $scope.$apply(function(){
+            $scope.model.mode = newMode;
+        });
+    };
+    $scope.checkMode = function(testMode){
+        return testMode == $scope.model.mode;
+    }
 
     $scope.newHS = function(){
         var data = getGameData();
@@ -56,7 +54,7 @@ app.controller("Ctrl", function($scope,HSServer){
     $scope.play3 = function(){
         numTracks = 3;
         SCENE_WIDTH = 350;
-        $('#menu').hide();
+        $scope.model.mode = "game";
         paused = false;
         main();
         $scope.reloadGlobal(3);
@@ -66,7 +64,7 @@ app.controller("Ctrl", function($scope,HSServer){
     $scope.play5 = function(){
         numTracks = 5;
         SCENE_WIDTH = 600;
-        $('#menu').hide();
+        $scope.model.mode = "game";
         paused = false;
         main();
         $scope.reloadGlobal(5);
@@ -101,21 +99,20 @@ app.controller("Ctrl", function($scope,HSServer){
         });
     }; */
     $scope.reloadGlobal = function(tracks){
-        HSServer.reloadGlobal(tracks).then(function(data){
-            $scope.globalHS = data;
-        },function(error){
-           console.log(error);
+        HSServer.reloadGlobal(tracks).success(function(response){
+          $scope.globalHS = response;
+        }).error(function(error){
         });
     };
 
     $scope.submitHS = function(data){
-        HSServer.submitHS(data).then(function(response){
+        HSServer.submitHS(data).success(function(response){
             if(response != "") alert(response);
             location.reload();
-        },function(error){
+        }).error(function(error){
             alert('Could not submit to server');
             location.reload();
-        })
+        });
     }
 
 });

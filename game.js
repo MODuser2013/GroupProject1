@@ -209,7 +209,7 @@ function draw() {
     }
 
     if(gameOver){
-        $("#newHS").show();
+        setMode('hs');
         $("#newHSScore").text(distance);
     }
 }
@@ -225,6 +225,10 @@ function getGameData(){
     }
 }
 
+function setMode(newMode){
+    angular.element( $('body') ).scope().setMode(newMode);
+}
+
 $('body').keydown(function(e){
    if(e.which == 65 && player.position.x > -TRACK_WIDTH*(numTracks-1)/2){  //a
        playerLocGrad.push(player.position.x);
@@ -236,7 +240,7 @@ $('body').keydown(function(e){
        playerLoc++;
    } else if(e.which == 80){
        paused = !paused;
-       $('#pauseMenu').toggle();
+       setMode(paused ? 'paused' : 'game');
    }
 
     if(ob1.data.position.z >= 40 && ob1.data.position.z <= 60 && !paused){

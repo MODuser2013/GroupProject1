@@ -28,7 +28,6 @@
             width: 700px;
             position: absolute;
             background: lightGray;
-            display: none;
             text-align: center;
             opacity: .8;
             top: 0px;
@@ -38,21 +37,18 @@
             width: 700px;
             position: absolute;
             background: lightGray;
-            display: none;
             text-align: center;
             top: 0px;
         }
     </style>
 
 </head>
-<body ng-controller="Ctrl">
+<body ng-controller="Ctrl" ng->
 <script>
     function cheat(){
         document.write("Cheating is wrong! Don't do it!!!");
     }
 </script>
-
-
 
 
 <span style='clear: both; display: inline-block; width: 100%;'>
@@ -81,15 +77,15 @@
 
 
 
-<div id="menu">
+<div id="menu" ng-show="checkMode('menu')">
     <h2>Select number of Tracks</h2>
     <br>
     <div id='3play' class='btn' ng-click="play3()">Play with 3 Tracks</div>
     <br><br>
     <div id='5play' class='btn' ng-click="play5()">Play with 5 Tracks</div>
 </div>
-<div id="pauseMenu">Paused</div>
-<div id="newHS">
+<div id="pauseMenu" ng-show="checkMode('paused')">Paused</div>
+<div id="newHS" ng-show="checkMode('hs')">
     <h3>New High Score</h3>
     <form ng-submit="newHS()">
         <span>
